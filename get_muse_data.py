@@ -5,6 +5,7 @@ import rospy
 from sensor_msgs.msg import Imu
 from geometry_msgs.msg import Quaternion
 import time
+from memeCallibrate import calibrate
 
 # first resolve an EEG stream on the lab network
 print("looking for an Accel stream...")
@@ -33,6 +34,10 @@ print 'streams found'
 
 eeg_inlet = StreamInlet(eeg_stream)
 
+#CALIBRATE
+threshes = calibrate(eeg_inlet)
+thresh_pub = rospy.Publisher('/thresh', Quaternion, queue_size = 1)
+
 #accel_pub = rospy.Publisher('/accel', Imu, queue_size = 10)
 eeg_pub = rospy.Publisher('/eeg', Quaternion, queue_size = 100)
 
@@ -40,6 +45,7 @@ rospy.init_node('muse_com')
 r = rospy.Rate(220) #20 Hz
 
 #accel_msg = Imu()
+thresh_msg = Quaternion()
 eeg_msg = Quaternion()
 
 t_old = 0
@@ -63,6 +69,11 @@ while not rospy.is_shutdown():
     print '\n'
     """
 
+    thresh_msg.x = threshes[0]
+    thresh_msg.y = threshes[1]
+    thresh_msg.z = threshes[2]
+    thresh_msg.w = threshes[3]
+
     eeg_msg.x = eeg_sample[0]
     eeg_msg.y = eeg_sample[1]
     eeg_msg.z = eeg_sample[2]
@@ -74,4 +85,5 @@ while not rospy.is_shutdown():
 
     #accel_pub.publish(accel_msg)
     eeg_pub.publish(eeg_msg)
+    thresh_pub.publish(thresh_msg)
     r.sleep()
