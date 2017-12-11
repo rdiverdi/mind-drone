@@ -39,11 +39,10 @@ class DirNotifier():
         self.dir_pub.publish("")
 
     def thresh_parse(self, msg):
-        if self.x_thresh:
-            self.x_thresh = msg.x
-            self.y_thresh = msg.y
-            self.z_thresh = msg.z
-            self.w_thresh = msg.w
+        self.x_thresh = msg.x
+        self.y_thresh = msg.y
+        self.z_thresh = msg.z
+        self.w_thresh = msg.w
 
     def eeg_parse(self, msg):
         self.iter_count = 0

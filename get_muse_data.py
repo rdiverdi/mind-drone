@@ -36,7 +36,13 @@ eeg_inlet = StreamInlet(eeg_stream)
 
 #CALIBRATE
 threshes = calibrate(eeg_inlet)
-thresh_pub = rospy.Publisher('/thresh', Quaternion, queue_size = 1)
+thresh_pub = rospy.Publisher('/thresh', Quaternion, queue_size = 1, latch = True)
+thresh_msg.x = threshes[0]
+thresh_msg.y = threshes[1]
+thresh_msg.z = threshes[2]
+thresh_msg.w = threshes[3]
+time.sleep(1000)
+thresh_pub.publish(thresh_msg)
 
 #accel_pub = rospy.Publisher('/accel', Imu, queue_size = 10)
 eeg_pub = rospy.Publisher('/eeg', Quaternion, queue_size = 100)
@@ -69,10 +75,6 @@ while not rospy.is_shutdown():
     print '\n'
     """
 
-    thresh_msg.x = threshes[0]
-    thresh_msg.y = threshes[1]
-    thresh_msg.z = threshes[2]
-    thresh_msg.w = threshes[3]
 
     eeg_msg.x = eeg_sample[0]
     eeg_msg.y = eeg_sample[1]
@@ -85,5 +87,4 @@ while not rospy.is_shutdown():
 
     #accel_pub.publish(accel_msg)
     eeg_pub.publish(eeg_msg)
-    thresh_pub.publish(thresh_msg)
     r.sleep()
