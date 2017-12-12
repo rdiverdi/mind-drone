@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-# 
+# Translate EEG data into eye movement directions
+# This script listens to an eeg topic and a thresh topic and outputs a dir
 
 import rospy
 import time

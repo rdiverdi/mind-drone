@@ -31,7 +31,6 @@ print 'streams found'
 
 # create a new inlet to read from the stream
 #accel_inlet = StreamInlet(accel_stream)
-
 eeg_inlet = StreamInlet(eeg_stream)
 
 rospy.init_node('muse_com')
