@@ -8,8 +8,8 @@ from std_msgs.msg import String
 from geometry_msgs.msg import Twist
 
 DIR_TOPIC = "/dir"
-CMD_TOPIC = "turtle1/cmd_vel"
-SCALE = 2
+CMD_TOPIC = "/cmd_vel"
+SCALE = .2
 
 class Controller():
     def __init__(self):
