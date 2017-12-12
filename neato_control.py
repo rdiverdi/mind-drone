@@ -28,12 +28,18 @@ class Controller():
 
     def dir_cb(self, msg):
         self.count = 0
-        if msg.data == 'left':
+        if msg.data == 'right':
             self.cmd.angular.z -= 0.5*SCALE
-        elif msg.data == 'right':
+            if self.cmd.angular.z < -5*SCALE:
+                self.cmd.angular.z = -5*SCALE
+        elif msg.data == 'left':
             self.cmd.angular.z += 0.5*SCALE
+            if self.cmd.angular.z > 5*SCALE:
+                self.cmd.angular.z = 5*SCALE
         elif msg.data == 'up':
             self.cmd.linear.x += 0.5*SCALE
+            if self.cmd.linear.x > 3*SCALE:
+                self.cmd.linear.x = 3*SCALE
         elif msg.data == 'down':
             self.cmd = Twist()
     

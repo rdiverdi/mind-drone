@@ -34,35 +34,44 @@ print 'streams found'
 
 eeg_inlet = StreamInlet(eeg_stream)
 
-#CALIBRATE
-threshes = calibrate(eeg_inlet)
-thresh_pub = rospy.Publisher('/thresh', Quaternion, queue_size = 1, latch = True)
-thresh_msg.x = threshes[0]
-thresh_msg.y = threshes[1]
-thresh_msg.z = threshes[2]
-thresh_msg.w = threshes[3]
-time.sleep(1000)
-thresh_pub.publish(thresh_msg)
+rospy.init_node('muse_com')
+r = rospy.Rate(220) #20 Hz
 
 #accel_pub = rospy.Publisher('/accel', Imu, queue_size = 10)
 eeg_pub = rospy.Publisher('/eeg', Quaternion, queue_size = 100)
 
-rospy.init_node('muse_com')
-r = rospy.Rate(220) #20 Hz
+#CALIBRATE
+threshes = calibrate(eeg_inlet)
+thresh_pub = rospy.Publisher('/thresh', Quaternion, queue_size = 1, latch = True)
+thresh_msg = Quaternion()
+thresh_msg.x = threshes[0]
+thresh_msg.y = threshes[1]
+thresh_msg.z = threshes[2]
+thresh_msg.w = threshes[3]
+time.sleep(1)
+thresh_pub.publish(thresh_msg)
 
 #accel_msg = Imu()
-thresh_msg = Quaternion()
 eeg_msg = Quaternion()
 
 t_old = 0
 
+clear = False
+while not clear:
+    val = eeg_inlet.pull_sample(0.0)
+    if val[0] == None:
+        clear = True
+
+print("Sending EEG data...")
 while not rospy.is_shutdown():
     # get a new sample (you can also omit the timestamp part if you're not
     # interested in it)
     #accel_sample, timestamp = accel_inlet.pull_sample()
     #print(timestamp, sample)
 
-    eeg_sample, eeg_tstamp = eeg_inlet.pull_sample()
+    eeg_sample, eeg_tstamp = eeg_inlet.pull_sample(0.0)
+    if eeg_sample == None:
+        continue
     #print eeg_sample
     
 
