@@ -16,6 +16,9 @@ This is a project for controlling a neato with eye movements. It is in pieces so
 
 3. run `python get_muse_data.py` from this folder
   - eeg data should now be published on ros topic `/eeg`
+  - follow calibration instructions
+    - this is easier if someone reads the instructions out to the person with the muse headset or the screen is eye-level
+    - "look left" means that you should quickly look leftward, then quickly back forward to await the next instruction
 
 4. run `python eeg_to_dir.py` from this folder
   - eeg data is now being processed
